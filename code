@@ -1,0 +1,116 @@
+
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+from google.colab import drive
+drive.mount('/content/drive')
+
+
+
+
+df=pd.read_csv("/content/drive/MyDrive/Python_Machine_learning_pandas_Numpy/Machine Learning/Logistics regression/heart_disease_data.csv")
+
+df
+
+df.info()
+
+df.shape
+
+df.isnull().sum()
+
+df.describe().T
+
+df["target"].value_counts()
+
+sns.countplot(x="target",data=df,hue="sex")
+#Blue=Female
+#orange=Male
+
+df["sex"].value_counts()
+
+#machine learning
+x = df.drop('target', axis = 1)#independent variable
+y = df['target']#dependent variable
+
+x
+
+
+bp
+low
+high
+medium
+#Label encoding
+h=0
+l=1
+m=2
+#dic
+l:1,m:2,h:3
+
+y
+
+from sklearn.preprocessing import StandardScaler
+
+ssc = StandardScaler()
+ssc.fit(x)
+
+x = ssc.transform(x)
+
+x
+
+from sklearn.model_selection import train_test_split#spliting
+
+x_train, x_test, y_train, y_test = train_test_split(x,y, test_size = 0.2)#training and testing data
+
+from sklearn.linear_model import LogisticRegression
+
+log_reg = LogisticRegression()#object  creation
+
+log_reg.fit(x_train, y_train)#model create
+
+log_reg.score(x_train, y_train)#training accuracy
+
+y_pred = log_reg.predict(x_test)#prediction
+y_pred
+
+from sklearn.metrics import confusion_matrix, accuracy_score, classification_report
+
+accuracy_score(y_test,y_pred)#testing accuracy
+
+confusion_matrix(y_test, y_pred)
+
+
+
+print(classification_report(y_test, y_pred))
+
+import joblib
+joblib.dump(log_reg,'log_reg.pkl')#pickle file
+
+model=joblib.load('log_reg.pkl')
+
+import tkinter as tk
+root=tk.Tk()
+root.title("Heart_disease_prediction")
+root.mainloop()
+
+#Building a Predictive System
+input1=(62,0,0,140,268,0,0,160,0,3.6,0,2,2)# tuple
+
+# change the input data to a numpy array
+nparray= np.asarray(input1)
+
+# reshape the numpy array as we are predicting for only on instance
+input_shape= nparray.reshape(1,-1)
+#The reshape(1, -1) is used to reshape the input data from a 1-dimensional array to a 2-dimensional array with one row and multiple columns.
+prediction = model.predict(input_shape)#predict method require 2d array
+print(prediction)
+
+if (prediction[0]== 0):
+  print('The Person does not have a Heart Disease')
+else:
+  print('The Person has Heart Disease')
+
+nparray
+
+input_shape
